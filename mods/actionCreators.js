@@ -19,6 +19,12 @@ const actionCreators = d => babel => {
                 t.objectProperty(
                   t.identifier("type"),
                   t.identifier(`types.${d.actionConstants[0]}`)
+                ),
+                t.objectProperty(
+                  t.identifier("payload"),
+                  t.identifier("payload"),
+                  false,
+                  true
                 )
               ])
             )

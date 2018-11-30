@@ -6,7 +6,6 @@ const env = require("babel-preset-env");
 const recast = require("recast");
 const constantCase = require("constant-case");
 
-const commands = require("./commands");
 const mods = require("./mods");
 const defaults = require("./defaults");
 
