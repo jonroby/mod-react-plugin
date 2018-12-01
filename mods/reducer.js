@@ -13,39 +13,35 @@ const reducer = d => babel => {
         );
 
         if (importActionConstants.length > 0) {
-          const actionAlreadyImported = !importActionConstants[0].specifiers
-            .map(s => s.imported.name)
-            .includes(d.actionConstants[0]);
-          if (actionAlreadyImported && d.actionConstants[0]) {
-            importActionConstants[0].specifiers.push(
-              t.importSpecifier(
-                t.identifier(d.actionConstants[0]),
-                t.identifier(d.actionConstants[0])
-              )
-            );
-          }
+          const currentImportedConstants = importActionConstants[0].specifiers.map(
+            s => s.imported.name
+          );
+
+          d.actionConstants.forEach(ac => {
+            if (!currentImportedConstants.includes(ac)) {
+              importActionConstants[0].specifiers.push(
+                t.importSpecifier(t.identifier(ac), t.identifier(ac))
+              );
+            }
+          });
         } else {
           const lastImportIdx = path.node.body.reduce((prev, curr, idx) => {
             if (curr.type === "ImportDeclaration") return idx;
             return prev;
           }, null);
+          const importSpecifiers = d.actionConstants.map(ac => {
+            return t.importSpecifier(t.identifier(ac), t.identifier(ac));
+          });
 
-          if (d.actionConstants[0]) {
-            const importDeclaration = t.importDeclaration(
-              [
-                t.importSpecifier(
-                  t.identifier(d.actionConstants[0]),
-                  t.identifier(d.actionConstants[0])
-                )
-              ],
-              t.stringLiteral(d.pathToActionConstantsReducer)
-            );
+          const importDeclaration = t.importDeclaration(
+            importSpecifiers,
+            t.stringLiteral(d.pathToActionConstantsReducer)
+          );
 
-            const rest = path.node.body.slice(lastImportIdx);
+          const rest = path.node.body.slice(lastImportIdx);
 
-            const ins = lastImportIdx === null ? 0 : lastImportIdx + 1;
-            path.node.body.splice(ins, 0, importDeclaration);
-          }
+          const ins = lastImportIdx === null ? 0 : lastImportIdx + 1;
+          path.node.body.splice(ins, 0, importDeclaration);
         }
       },
 

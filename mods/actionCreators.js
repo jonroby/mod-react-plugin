@@ -1,3 +1,6 @@
+const constantCase = require("constant-case");
+const camelCase = require("camelcase");
+
 const actionCreators = d => babel => {
   const { types: t } = babel;
 
@@ -5,20 +8,25 @@ const actionCreators = d => babel => {
     name: "action creators",
     visitor: {
       Program(path) {
-        const actionCreatorExists = path.node.body
+        const currentCreators = path.node.body
           .filter(i => i.type === "ExportNamedDeclaration")
-          .map(i => i.declaration.declarations[0].id.name)
-          .includes(d.action);
+          .map(i => i.declaration.declarations[0].id.name);
 
-        if (!actionCreatorExists) {
+        const newActionCreators = d.actionConstants
+          .map(i => camelCase(i))
+          .filter(ac => {
+            return !currentCreators.includes(ac);
+          });
+
+        newActionCreators.forEach(ac => {
           const actionCreator = t.variableDeclarator(
-            t.identifier(d.action),
+            t.identifier(ac),
             t.arrowFunctionExpression(
               [t.identifier("payload")],
               t.objectExpression([
                 t.objectProperty(
                   t.identifier("type"),
-                  t.identifier(`types.${d.actionConstants[0]}`)
+                  t.identifier(`types.${constantCase(ac)}`)
                 ),
                 t.objectProperty(
                   t.identifier("payload"),
@@ -36,7 +44,7 @@ const actionCreators = d => babel => {
           );
 
           path.node.body.push(v);
-        }
+        });
       }
     }
   };

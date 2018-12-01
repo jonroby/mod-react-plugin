@@ -1,26 +1,29 @@
 const actionConstants = (d, m) => babel => {
   const { types: t } = babel;
-  
+
   return {
     name: "action constants",
     visitor: {
       Program(path) {
-        const actionConstantExists = path.node.body
-          .map(i => i.declaration.declarations[0].id.name)
-          .includes(d.actionConstants[0]);
+        const newActionConstants = d.actionConstants.filter(ac => {
+          const currentConstants = path.node.body.map(
+            i => i.declaration.declarations[0].id.name
+          );
 
-        if (!actionConstantExists) {
-          const exports = d.actionConstants.map(ac => {
-            const variable = t.variableDeclaration("const", [
-              t.variableDeclarator(t.identifier(ac), t.stringLiteral(ac))
-            ]);
-            return t.exportNamedDeclaration(variable, []);
-          });
+          return !currentConstants.includes(ac);
+        });
 
-          exports.forEach(exp => {
-            path.node.body.push(exp);
-          });
-        }
+        const exports = newActionConstants.map(ac => {
+          const variable = t.variableDeclaration("const", [
+            t.variableDeclarator(t.identifier(ac), t.stringLiteral(ac))
+          ]);
+
+          return t.exportNamedDeclaration(variable, []);
+        });
+
+        exports.forEach(exp => {
+          path.node.body.push(exp);
+        });
       }
     }
   };
