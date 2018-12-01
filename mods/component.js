@@ -5,7 +5,6 @@ const component = d => babel => {
     name: "component",
     visitor: {
       Program(path) {
-        // Add import
         const imports = path.node.body.filter(
           i => i.type === "ImportDeclaration"
         );
