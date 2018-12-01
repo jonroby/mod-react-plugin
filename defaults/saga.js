@@ -6,8 +6,14 @@ import request from "./requests/${d.saga}";
 
 export function* ${d.saga}Request(action) {
   try {
-    const data = yield call(...request);
-    yield put(${d.action}Success(data));
+    const response = yield call(...request);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = yield response.json();
+      yield put(${d.action}Success(data));
+    } else {
+      throw response;
+    }
   } catch (error) {
     yield put(${d.action}Failure(error));
   }
