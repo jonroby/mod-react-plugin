@@ -5,7 +5,6 @@ const reducerState = d => babel => {
     name: "add state to reducer",
     visitor: {
       Program(path) {
-
         const vars = path.node.body.filter(
           i => i.type === "VariableDeclaration"
         );
@@ -13,19 +12,20 @@ const reducerState = d => babel => {
         let initalStateExists = false;
         vars.forEach(v => {
           // if property already exists don't add it.
-
-          if (v.declarations[0].id.name === "initialState") {
-            initalStateExists = true;
-            if (
-              !v.declarations[0].init.properties
-                .map(i => i.key.name)
-                .includes(d.stateKey)
-            ) {
-              v.declarations[0].init.properties.push(
-                t.objectProperty(t.identifier(d.stateKey), t.identifier())
-              );
+          d.stateKeys.forEach(stateKey => {
+            if (v.declarations[0].id.name === "initialState") {
+              initalStateExists = true;
+              if (
+                !v.declarations[0].init.properties
+                  .map(i => i.key.name)
+                  .includes(stateKey)
+              ) {
+                v.declarations[0].init.properties.push(
+                  t.objectProperty(t.identifier(stateKey), t.identifier())
+                );
+              }
             }
-          }
+          });
         });
 
         // If initialState object doesn't exist, add it

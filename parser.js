@@ -7,12 +7,12 @@ const jsx = require("babel-plugin-syntax-jsx");
 const parser = (filestring, mod) => {
   const transformedFile = transform(filestring, {
     parserOpts: {
-      parser: recast.parse
+      parser: recast.parse,
     },
     generatorOpts: {
-      generator: recast.print
+      generator: recast.print,
     },
-    plugins: [objectRestSpread, classProperties, jsx, mod]
+    plugins: [objectRestSpread, classProperties, jsx, mod],
   });
 
   return transformedFile && transformedFile.code;

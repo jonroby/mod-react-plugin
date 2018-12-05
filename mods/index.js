@@ -18,7 +18,7 @@ module.exports = {
     rootSaga
   },
   addState: {
-    componentState,
-    reducerState
+    component: componentState,
+    reducer: reducerState,
   }
 };
