@@ -19,7 +19,7 @@ const commands = {
 const flagToFlagName = {
   "-a": "action",
   "-o": "actionConstant",
-  "-e": "actionCreator",
+  "-e": "action",      // This is an issue!
   "-c": "component",
   "-r": "reducer",     // The only d.reducer is set is because it gets
   "-d": "reducer",     // double named here
