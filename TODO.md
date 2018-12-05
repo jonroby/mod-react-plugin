@@ -1,0 +1,7 @@
+- [ ] Refactor code along with mod-cli to handle a map rather than list
+- [ ] Post refactor test suite
+- [ ] Better error handling
+- [ ] Options for graphql (query, mutation) and rest (get, post, put, del)
+- [ ] Option for mapping graphql requests to reducer state and component state
+- [ ] Accurate information on what's modified
+- [ ] Delete option

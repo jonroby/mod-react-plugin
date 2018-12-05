@@ -1,7 +1,7 @@
 const constantCase = require("constant-case");
 const camelCase = require("camelcase");
 
-const actionCreators = d => babel => {
+const actionCreator = d => babel => {
   const { types: t } = babel;
 
   return {
@@ -42,7 +42,7 @@ const actionCreators = d => babel => {
             t.variableDeclaration("const", [actionCreator]),
             []
           );
-
+	  
           path.node.body.push(v);
         });
       }
@@ -50,4 +50,4 @@ const actionCreators = d => babel => {
   };
 };
 
-module.exports = actionCreators;
+module.exports = actionCreator;

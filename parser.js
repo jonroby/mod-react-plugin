@@ -5,17 +5,17 @@ const classProperties = require("babel-plugin-syntax-class-properties");
 const jsx = require("babel-plugin-syntax-jsx");
 
 const parser = (filestring, mod) => {
-    const transformedFile = transform(filestring, {
-      parserOpts: {
-        parser: recast.parse
-      },
-      generatorOpts: {
-        generator: recast.print
-      },
-      plugins: [objectRestSpread, classProperties, jsx, mod]
-    });
+  const transformedFile = transform(filestring, {
+    parserOpts: {
+      parser: recast.parse
+    },
+    generatorOpts: {
+      generator: recast.print
+    },
+    plugins: [objectRestSpread, classProperties, jsx, mod]
+  });
 
-    return transformedFile && transformedFile.code;
-}
+  return transformedFile && transformedFile.code;
+};
 
 module.exports = parser;

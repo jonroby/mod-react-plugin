@@ -1,4 +1,4 @@
-const actionConstants = (d, m) => babel => {
+const actionConstant = d => babel => {
   const { types: t } = babel;
 
   return {
@@ -17,16 +17,15 @@ const actionConstants = (d, m) => babel => {
           const variable = t.variableDeclaration("const", [
             t.variableDeclarator(t.identifier(ac), t.stringLiteral(ac))
           ]);
-
           return t.exportNamedDeclaration(variable, []);
         });
 
         exports.forEach(exp => {
           path.node.body.push(exp);
-        });
+        });	
       }
     }
   };
 };
 
-module.exports = actionConstants;
+module.exports = actionConstant;
