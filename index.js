@@ -12,7 +12,7 @@ const NONE = "NONE";
 
 const commands = {
   a: "addAction",
-  x: "addState",
+  x: "addState"
 };
 
 // TODO: Potential bugs in the naming!
@@ -27,50 +27,48 @@ const flagToFlagName = {
   "-s": "saga", // Same problem here
   "-u": "saga", // !
   "-g": "rootSaga",
-  "-q": "request", // If you just tried request an error would occur
+  "-q": "request" // If you just tried request an error would occur
 }; // because d.saga won't be set.
 
 const chains = {
   "-a": ["-o", "-e"],
   "-s": ["-u", "-g", "-q"],
-  "-r": ["-d", "-t"],
+  "-r": ["-d", "-t"]
 };
 
 const modFlags = data => ({
   "-o": {
     name: "actionConstant",
-    filepath: `./src/redux/actions/constants.js`,
+    filepath: `./src/redux/actions/constants.js`
   },
   "-e": {
     name: "actionCreator",
-    filepath: `./src/redux/actions/creators.js`,
+    filepath: `./src/redux/actions/creators.js`
   },
   "-c": {
     name: "component",
-    filepath: `./src/components/${upperFirstLetter(
-      data.component || NONE
-    )}.jsx`,
+    filepath: `./src/components/${upperFirstLetter(data.component || NONE)}.jsx`
   },
   "-d": {
     name: "reducer",
-    filepath: `./src/redux/reducers/${data.reducer}.js`,
+    filepath: `./src/redux/reducers/${data.reducer}.js`
   },
   "-t": {
     name: "rootReducer",
-    filepath: `./src/redux/reducers/rootReducer.js`,
+    filepath: `./src/redux/reducers/rootReducer.js`
   },
   "-u": {
     name: "saga",
-    filepath: `./src/redux/sagas/${data.saga}.js`,
+    filepath: `./src/redux/sagas/${data.saga}.js`
   },
   "-g": {
     name: "rootSaga",
-    filepath: `./src/redux/sagas/rootSaga.js`,
+    filepath: `./src/redux/sagas/rootSaga.js`
   },
   "-q": {
     name: "request",
-    filepath: `./src/redux/sagas/requests/${data.saga}.js`,
-  },
+    filepath: `./src/redux/sagas/requests/${data.saga}.js`
+  }
 });
 
 const handleActionCommand = (input, inputIncludesAsync) => {
@@ -102,7 +100,7 @@ const handleActionCommand = (input, inputIncludesAsync) => {
     ? [
         constantCase(action),
         constantCase(`${action}_SUCCESS`),
-        constantCase(`${action}_FAILURE`),
+        constantCase(`${action}_FAILURE`)
       ]
     : [constantCase(action)];
   return { newInput, data: {}, actionConstants };
@@ -116,6 +114,7 @@ const handleStateCommand = input => {
   for (let i = 0; i < input.length; i++) {
     if (input[i] && input[i].match(/-[a-z]/)) {
       rightIdx = i;
+      break;
     }
   }
   const newInput = input.slice(0, 1).concat(input.slice(rightIdx));
@@ -135,13 +134,13 @@ const hook = mod => {
   const additionalData = {
     pathToActionCreators: "../redux/actions/creators",
     pathToActionConstantsReducer: "../actions/constants",
-    actionConstants,
+    actionConstants
   };
 
   return {
     ...mod,
     data: { ...mod.data, ...data, ...additionalData },
-    input: newInput,
+    input: newInput
   };
 };
 
@@ -183,7 +182,7 @@ const config = {
   mods,
   gens,
   hook,
-  man,
+  man
 };
 
 module.exports = config;
