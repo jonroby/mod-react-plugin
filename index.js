@@ -15,24 +15,20 @@ const commands = {
   x: "addState"
 };
 
-// Several of these don't actually need a name (rootReducer, rootSaga)
-// in the data object. However, they are required for other tasks.
-// Since their isn't easy way to let Mod CLI to remove them from data
-// object they're left in. Harmless. Note: reducer is named twice.
-// Is there a way to do better?
+// TODO: Potential bugs in the naming!
 const flagToFlagName = {
   "-a": "action",
   "-o": "actionConstant",
   "-e": "actionCreator",
   "-c": "component",
-  "-r": "reducer",
-  "-d": "reducer",
-  "-t": "rootReducer",
-  "-s": "saga",
-  "-u": "sagaGenerator",
+  "-r": "reducer",     // The only d.reducer is set is because it gets
+  "-d": "reducer",     // double named here
+  "-t": "rootReducer", 
+  "-s": "saga",        // Same problem here
+  "-u": "saga",        // !
   "-g": "rootSaga",
-  "-q": "request"
-};
+  "-q": "request"      // If you just tried request an error would occur
+};                     // because d.saga won't be set.
 
 const chains = {
   "-a": ["-o", "-e"],
