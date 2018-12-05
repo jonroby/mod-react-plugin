@@ -94,6 +94,14 @@ const hook = mod => {
     }
   }
 
+  for (let i = 0; i < newInput.length; i++) {
+    if (newInput[i].match(/-[a-z]/) && newInput[i] !== "-c") {
+      newInput[i+1] = lowerFirstLetter(newInput[i+1]); 
+    } else if (newInput[i].match(/-[a-z]/) && newInput[i] === "-c") {
+      newInput[i+1] = upperFirstLetter(newInput[i+1]); 
+    }
+  }
+
   const actionConstants = inputIncludesAsync
     ? [
         constantCase(action),
