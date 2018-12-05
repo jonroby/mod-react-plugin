@@ -19,16 +19,16 @@ const commands = {
 const flagToFlagName = {
   "-a": "action",
   "-o": "actionConstant",
-  "-e": "action",      // This is an issue!
+  "-e": "action", // This is an issue!
   "-c": "component",
-  "-r": "reducer",     // The only d.reducer is set is because it gets
-  "-d": "reducer",     // double named here
-  "-t": "rootReducer", 
-  "-s": "saga",        // Same problem here
-  "-u": "saga",        // !
+  "-r": "reducer", // The only d.reducer is set is because it gets
+  "-d": "reducer", // double named here
+  "-t": "rootReducer",
+  "-s": "saga", // Same problem here
+  "-u": "saga", // !
   "-g": "rootSaga",
-  "-q": "request"      // If you just tried request an error would occur
-};                     // because d.saga won't be set.
+  "-q": "request" // If you just tried request an error would occur
+}; // because d.saga won't be set.
 
 const chains = {
   "-a": ["-o", "-e"],
@@ -92,9 +92,9 @@ const hook = mod => {
 
   for (let i = 0; i < newInput.length; i++) {
     if (newInput[i].match(/-[a-z]/) && newInput[i] !== "-c") {
-      newInput[i+1] = lowerFirstLetter(newInput[i+1]); 
+      newInput[i + 1] = lowerFirstLetter(newInput[i + 1]);
     } else if (newInput[i].match(/-[a-z]/) && newInput[i] === "-c") {
-      newInput[i+1] = upperFirstLetter(newInput[i+1]); 
+      newInput[i + 1] = upperFirstLetter(newInput[i + 1]);
     }
   }
 
