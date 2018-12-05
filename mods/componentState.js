@@ -16,54 +16,57 @@ const component = d => babel => {
         let mapStateToPropsExists = false;
         vars.forEach(v => {
           // if property already exists don't add it.
-          if (v.declarations[0].id.name === "mapStateToProps") {
-            mapStateToPropsExists = true;
-            const splitKey = d.stateKey.split(".");
-            const key = splitKey[splitKey.length - 1];
+          d.stateKeys.forEach(stateKey => {
+            if (v.declarations[0].id.name === "mapStateToProps") {
+              mapStateToPropsExists = true;
+              const splitKey = stateKey.split(".");
+              const key = splitKey[splitKey.length - 1];
 
-            const value =
-              d.stateKey.split(".").length > 1
-                ? d.stateKey
-                : `${d.reducer || lowerFirstLetter(d.component)}.${d.stateKey}`;
+              const value =
+                stateKey.split(".").length > 1
+                  ? stateKey
+                  : `${d.reducer || lowerFirstLetter(d.component)}.${stateKey}`;
 
-            if (
-              !v.declarations[0].init.body.properties
-                .map(p => p.key.name)
-                .includes(key)
-            ) {
-              v.declarations[0].init.body.properties.push(
-                t.objectProperty(
-                  t.identifier(key),
-                  t.identifier(`state.${value}`)
-                )
-              );
+              if (
+                !v.declarations[0].init.body.properties
+                  .map(p => p.key.name)
+                  .includes(key)
+              ) {
+                v.declarations[0].init.body.properties.push(
+                  t.objectProperty(
+                    t.identifier(key),
+                    t.identifier(`state.${value}`)
+                  )
+                );
+              }
             }
-          }
+          });
         });
 
         // If mapStateToProps object doesn't exist, add it
         // with property
         if (!mapStateToPropsExists) {
           // DUPLICATED FROM ABOVE
-          const splitKey = d.stateKey.split(".");
-          const key = splitKey[splitKey.length - 1];
+          const objectProperties = d.stateKeys.map(stateKey => {
+            const splitKey = stateKey.split(".");
+            const key = splitKey[splitKey.length - 1];
 
-          const value =
-            d.stateKey.split(".").length > 1
-              ? d.stateKey
-              : `${d.reducer || lowerFirstLetter(d.component)}.${d.stateKey}`;
-          // DUPLICATED FROM ABOVE
+            const value =
+              stateKey.split(".").length > 1
+                ? d.stateKey
+                : `${d.reducer || lowerFirstLetter(d.component)}.${stateKey}`;
 
+            return t.objectProperty(
+              t.identifier(key),
+              t.identifier(`state.${value}`)
+            );
+            // DUPLICATED FROM ABOVE
+          });
           const mapStateToProps = t.variableDeclarator(
             t.identifier("mapStateToProps"),
             t.arrowFunctionExpression(
               [t.identifier("state")],
-              t.objectExpression([
-                t.objectProperty(
-                  t.identifier(key),
-                  t.identifier(`state.${value}`)
-                )
-              ])
+              t.objectExpression(objectProperties)
             )
           );
           const variable = t.variableDeclaration("const", [mapStateToProps]);
