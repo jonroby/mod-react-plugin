@@ -116,6 +116,7 @@ const handleStateCommand = input => {
   for (let i = 0; i < input.length; i++) {
     if (input[i] && input[i].match(/-[a-z]/)) {
       rightIdx = i;
+      break;
     }
   }
   const newInput = input.slice(0, 1).concat(input.slice(rightIdx));
