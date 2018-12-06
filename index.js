@@ -149,30 +149,22 @@ const hook = mod => {
 const man = `
 Mod CLI mod-react-plugin
 
-mod <command> <flag> <name>
+Usage: mod <command> <flag> <name>
+Sugar: mod <action> <component|reducer>
 
-  command
-  a - add a Redux action
+command                         name
+  a - add Redux action(s)         user choice
   x - add Redux state
 
-  flag
-  -a: action [-o, -e],
-  -s: saga [-u, -g, -q],
-  -r: reducer [-d, -t]
-
-  -o: actionConstant
+flag                            chains
+  -o: actionConstant              -a: [-o, -e]
   -e: actionCreator
   -c: component
-  -r: reducer
-  -d: reducer
+  -d: reducer                     -r: [-d, -t]
   -t: rootReducer
-  -s: saga
-  -u: sagaGenerator
+  -u: sagaGenerator               -s: [-u, -g, -q]
   -g: rootSaga
   -q: request
-
-  name
-  
 `;
 
 const config = {
